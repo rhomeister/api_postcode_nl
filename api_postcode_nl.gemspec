@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
     "README.md",
     "Rakefile",
     "VERSION",
+    "api_postcode_nl.gemspec",
     "lib/api_postcode_nl.rb",
     "lib/api_postcode_nl/api.rb",
     "test/helper.rb",
