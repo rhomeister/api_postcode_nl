@@ -1,14 +1,23 @@
 = api_postcode_nl
 
-Usage:
+A gem for interfacing with http://api.postcode.nl, a webservice that converts a Dutch postcode + house number into a full address. Go to http://api.postcode.nl to sign up and create a secret + key. 
 
-```gem "api_postcode_nl"```
+Disclaimer: the creator of this gem is not in any way affiliated with api.postcode.nl.
 
-```ApiPostcodeNl::API.key="your key here"
-ApiPostcodeNl::API.secret="your secret here"
+== Installation
 
-ApiPostcodeNl::API.address("9999AA", "123", "a")```
+Add to your Gemfile:
 
+  gem "api_postcode_nl"
+
+== Configuration
+  ApiPostcodeNl::API.key="your key here"
+  ApiPostcodeNl::API.secret="your secret here"
+
+== Usage
+  ApiPostcodeNl::API.address("9999AA", "123", "a")
+  # result:
+  {:street_name=>nil, :house_number=>nil, :postcode=>nil, :city=>nil, :municipality=>nil, :province=>nil, :latitude=>nil, :longitude=>nil, :address_type=>nil, :purpose=>nil, :area=>nil, :house_number_additions=>nil}
 
 == Contributing to api_postcode_nl
  
@@ -24,4 +33,3 @@ ApiPostcodeNl::API.address("9999AA", "123", "a")```
 
 Copyright (c) 2013 rhomeister. See LICENSE.txt for
 further details.
-
