@@ -14,14 +14,14 @@ Gem::Specification.new do |s|
   s.email = "r.stranders@gmail.com"
   s.extra_rdoc_files = [
     "LICENSE.txt",
-    "README.md"
+    "README.rdoc"
   ]
   s.files = [
     ".document",
     "Gemfile",
     "Gemfile.lock",
     "LICENSE.txt",
-    "README.md",
+    "README.rdoc",
     "Rakefile",
     "VERSION",
     "api_postcode_nl.gemspec",
