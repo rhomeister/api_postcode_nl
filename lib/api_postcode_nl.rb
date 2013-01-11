@@ -1,0 +1,1 @@
+require 'wtf_lang/api'

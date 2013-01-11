@@ -17,8 +17,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "api_postcode_nl"
   gem.homepage = "http://github.com/rhomeister/api_postcode_nl"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Ruby gem for interfacing with api.postcode.nl}
+  gem.description = %Q{Retrieve a Dutch address based on housenumber and postcode}
   gem.email = "r.stranders@gmail.com"
   gem.authors = ["rhomeister"]
   # dependencies defined in Gemfile
@@ -30,14 +30,6 @@ Rake::TestTask.new(:test) do |test|
   test.libs << 'lib' << 'test'
   test.pattern = 'test/**/test_*.rb'
   test.verbose = true
-end
-
-require 'rcov/rcovtask'
-Rcov::RcovTask.new do |test|
-  test.libs << 'test'
-  test.pattern = 'test/**/test_*.rb'
-  test.verbose = true
-  test.rcov_opts << '--exclude "gems/*"'
 end
 
 task :default => :test
