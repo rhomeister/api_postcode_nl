@@ -1,6 +1,14 @@
 = api_postcode_nl
 
-Description goes here.
+Usage:
+
+```gem "api_postcode_nl"```
+
+```ApiPostcodeNl::API.key="your key here"
+ApiPostcodeNl::API.secret="your secret here"
+
+ApiPostcodeNl::API.address("9999AA", "123", "a")```
+
 
 == Contributing to api_postcode_nl
  
