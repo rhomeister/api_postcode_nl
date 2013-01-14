@@ -2,14 +2,16 @@
 require 'net/http'
 require 'net/https'
 require 'json'
+require 'api_postcode_nl/invalid_postcode_exception'
 
 module ApiPostcodeNl
   class API
     BASE_URL = "https://api.postcode.nl/rest/addresses"
-
+    
     class << self
       def get_url(postcode, house_number, house_number_addition = nil)
-        "#{BASE_URL}/#{postcode}/#{house_number}" + (house_number_addition ? "/#{house_number_addition}" : "")
+        postcode, house_number, house_number_addition = [postcode, house_number, house_number_addition].map{|c| c.to_s.delete(" ")}
+        "#{BASE_URL}/#{postcode}/#{house_number}/#{house_number_addition}"
       end
 
       def send(postcode, house_number, house_number_addition = nil)
@@ -19,9 +21,21 @@ module ApiPostcodeNl
         
         request = Net::HTTP::Get.new(uri.path)
         request.basic_auth key, secret
-        http.start {|http|
+        result = http.start {|http|
           http.request(request)
-        }.body
+        }
+        handle_errors(result)
+        
+        result.body
+      end
+      
+      def handle_errors(result)
+        if result.is_a?(Net::HTTPNotFound)
+          raise ApiPostcodeNl::InvalidPostcodeException, JSON.parse(result.body)["exception"]
+        end
+        #puts result.code.class
+        #puts result.message
+        #puts result.body
       end
 
       def parse(response)

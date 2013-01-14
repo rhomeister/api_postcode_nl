@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "api_postcode_nl"
-  s.version = "0.1.2"
+  s.version = "0.1.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["rhomeister"]
@@ -27,6 +27,7 @@ Gem::Specification.new do |s|
     "api_postcode_nl.gemspec",
     "lib/api_postcode_nl.rb",
     "lib/api_postcode_nl/api.rb",
+    "lib/api_postcode_nl/invalid_postcode_exception.rb",
     "test/helper.rb",
     "test/test_api_postcode_nl.rb"
   ]
