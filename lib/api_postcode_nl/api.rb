@@ -7,6 +7,7 @@ require 'api_postcode_nl/invalid_postcode_exception'
 module ApiPostcodeNl
   class API
     BASE_URL = "https://api.postcode.nl/rest/addresses"
+    NIL_RESULT_CODE = "api_postcode_nl_NIL_RESULT_CODE"
     
     class << self
       def get_url(postcode, house_number, house_number_addition = nil)
@@ -37,7 +38,7 @@ module ApiPostcodeNl
         #puts result.message
         #puts result.body
       end
-
+      
       def parse(response)
         result = {}
         parsed_response = JSON.parse(response)
@@ -53,12 +54,47 @@ module ApiPostcodeNl
           address_type: parsed_response["addressType"],
           purpose: parsed_response["purpose"],
           area: parsed_response["surfaceArea"],
-          house_number_additions: parsed_response["houseNumberAdditions"]
+          house_number_additions: parsed_response["houseNumberAdditions"],
+          house_number_addition: parsed_response["houseNumberAddition"]
         }
+      end
+      
+      def cache_key(postcode, house_number, house_number_addition)
+        "api_postcode_nl_#{postcode.to_s.downcase}_#{house_number.to_s.downcase}_#{house_number_addition.to_s.downcase}"
       end
 
       def address(postcode, house_number, house_number_addition = nil)
-        parse(send(postcode, house_number, house_number_addition))
+        if house_number_addition.blank? && house_number
+          # attempt to get a house_number_addition from the house number
+          house_number = house_number.to_s
+          number = house_number.split(/[^0-9]/)[0] 
+          house_number_addition = house_number.sub(number, "")
+          house_number = number 
+        end
+        
+        if postcode.blank? || house_number.blank?
+          return nil
+        end
+        
+        key = cache_key(postcode, house_number, house_number_addition)
+        if cache && result = cache.read(key)
+          return nil if result == NIL_RESULT_CODE
+          return result
+        end
+        
+        result = parse(send(postcode, house_number, house_number_addition))
+        
+        cache.write(key, result ? result : NIL_RESULT_CODE, :expires_in => 1.week) if cache
+        
+        result
+      end
+      
+      def cache=(cache)
+        @@cache = cache
+      end
+      
+      def cache
+        @@cache ||= nil
       end
 
       def key
