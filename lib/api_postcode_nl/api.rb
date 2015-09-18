@@ -70,8 +70,10 @@ module ApiPostcodeNl
           # attempt to get a house_number_addition from the house number
           house_number = house_number.to_s
           number = house_number.split(/[^0-9]/)[0] 
-          house_number_addition = house_number.sub(number, "")
-          house_number = number 
+          if number
+            house_number_addition = house_number.sub(number, "")
+            house_number = number
+          end
         end
         
         if postcode.blank? || house_number.blank?
