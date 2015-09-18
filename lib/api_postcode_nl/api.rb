@@ -8,6 +8,20 @@ require 'api_postcode_nl/invalid_postcode_exception'
 
 module ApiPostcodeNl
   class API
+    class Fetcher
+      def fetch(uri, key, secret)
+        http = Net::HTTP.new(uri.host, uri.port)
+        http.use_ssl = true
+
+        request = Net::HTTP::Get.new(uri.path)
+        request.basic_auth key, secret
+        result = http.start {|http|
+          http.request(request)
+        }
+        result
+      end
+    end
+
     BASE_URL = "https://api.postcode.nl/rest/addresses"
     NIL_RESULT_CODE = "api_postcode_nl_NIL_RESULT_CODE"
     
@@ -19,16 +33,10 @@ module ApiPostcodeNl
 
       def fetch(postcode, house_number, house_number_addition = nil)
         uri = URI.parse(get_url(postcode, house_number, house_number_addition))
-        http = Net::HTTP.new(uri.host, uri.port)
-        http.use_ssl = true
-        
-        request = Net::HTTP::Get.new(uri.path)
-        request.basic_auth key, secret
-        result = http.start {|http|
-          http.request(request)
-        }
+        result = fetcher.fetch(uri, key, secret)
+
         handle_errors(result)
-        
+
         result.body
       end
       
@@ -36,11 +44,8 @@ module ApiPostcodeNl
         if result.is_a?(Net::HTTPNotFound)
           raise ApiPostcodeNl::InvalidPostcodeException, JSON.parse(result.body)["exception"]
         end
-        #puts result.code.class
-        #puts result.message
-        #puts result.body
       end
-      
+
       def parse(response)
         result = {}
         parsed_response = JSON.parse(response)
@@ -99,6 +104,14 @@ module ApiPostcodeNl
       
       def cache
         @@cache ||= nil
+      end
+
+      def fetcher=(fetcher)
+        @@fetcher = fetcher
+      end
+
+      def fetcher
+        @@fetcher ||= Fetcher.new
       end
 
       def key
