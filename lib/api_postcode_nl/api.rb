@@ -17,7 +17,7 @@ module ApiPostcodeNl
         "#{BASE_URL}/#{postcode}/#{house_number}/#{house_number_addition}"
       end
 
-      def send(postcode, house_number, house_number_addition = nil)
+      def fetch(postcode, house_number, house_number_addition = nil)
         uri = URI.parse(get_url(postcode, house_number, house_number_addition))
         http = Net::HTTP.new(uri.host, uri.port)
         http.use_ssl = true
@@ -84,7 +84,7 @@ module ApiPostcodeNl
           return result
         end
         
-        result = parse(send(postcode, house_number, house_number_addition))
+        result = parse(fetch(postcode, house_number, house_number_addition))
         
         cache.write(key, result ? result : NIL_RESULT_CODE, :expires_in => 1.week) if cache
         
