@@ -2,6 +2,8 @@
 require 'net/http'
 require 'net/https'
 require 'json'
+require 'active_support'
+require 'active_support/core_ext/object'
 require 'api_postcode_nl/invalid_postcode_exception'
 
 module ApiPostcodeNl
