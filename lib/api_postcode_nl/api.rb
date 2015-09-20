@@ -2,10 +2,26 @@
 require 'net/http'
 require 'net/https'
 require 'json'
+require 'active_support'
+require 'active_support/core_ext/object'
 require 'api_postcode_nl/invalid_postcode_exception'
 
 module ApiPostcodeNl
   class API
+    class Fetcher
+      def fetch(uri, key, secret)
+        http = Net::HTTP.new(uri.host, uri.port)
+        http.use_ssl = true
+
+        request = Net::HTTP::Get.new(uri.path)
+        request.basic_auth key, secret
+        result = http.start {|http|
+          http.request(request)
+        }
+        result
+      end
+    end
+
     BASE_URL = "https://api.postcode.nl/rest/addresses"
     NIL_RESULT_CODE = "api_postcode_nl_NIL_RESULT_CODE"
     
@@ -15,18 +31,12 @@ module ApiPostcodeNl
         "#{BASE_URL}/#{postcode}/#{house_number}/#{house_number_addition}"
       end
 
-      def send(postcode, house_number, house_number_addition = nil)
+      def fetch(postcode, house_number, house_number_addition = nil)
         uri = URI.parse(get_url(postcode, house_number, house_number_addition))
-        http = Net::HTTP.new(uri.host, uri.port)
-        http.use_ssl = true
-        
-        request = Net::HTTP::Get.new(uri.path)
-        request.basic_auth key, secret
-        result = http.start {|http|
-          http.request(request)
-        }
+        result = fetcher.fetch(uri, key, secret)
+
         handle_errors(result)
-        
+
         result.body
       end
       
@@ -34,11 +44,8 @@ module ApiPostcodeNl
         if result.is_a?(Net::HTTPNotFound)
           raise ApiPostcodeNl::InvalidPostcodeException, JSON.parse(result.body)["exception"]
         end
-        #puts result.code.class
-        #puts result.message
-        #puts result.body
       end
-      
+
       def parse(response)
         result = {}
         parsed_response = JSON.parse(response)
@@ -68,8 +75,10 @@ module ApiPostcodeNl
           # attempt to get a house_number_addition from the house number
           house_number = house_number.to_s
           number = house_number.split(/[^0-9]/)[0] 
-          house_number_addition = house_number.sub(number, "")
-          house_number = number 
+          if number
+            house_number_addition = house_number.sub(number, "")
+            house_number = number
+          end
         end
         
         if postcode.blank? || house_number.blank?
@@ -82,7 +91,7 @@ module ApiPostcodeNl
           return result
         end
         
-        result = parse(send(postcode, house_number, house_number_addition))
+        result = parse(fetch(postcode, house_number, house_number_addition))
         
         cache.write(key, result ? result : NIL_RESULT_CODE, :expires_in => 1.week) if cache
         
@@ -95,6 +104,14 @@ module ApiPostcodeNl
       
       def cache
         @@cache ||= nil
+      end
+
+      def fetcher=(fetcher)
+        @@fetcher = fetcher
+      end
+
+      def fetcher
+        @@fetcher ||= Fetcher.new
       end
 
       def key
