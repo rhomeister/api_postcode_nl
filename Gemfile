@@ -10,6 +10,6 @@ gem "activesupport", ">= 2.3.5"
 group :development do
   gem "test-unit", "~> 3.1.2"
   gem "shoulda", "~> 3.5.0"
-  gem "rdoc", "~> 3.12"
+  gem "rdoc", "~> 4.2.2"
   gem "jeweler", "~> 1.8.4"
 end
