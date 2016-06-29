@@ -11,5 +11,5 @@ group :development do
   gem "test-unit", "~> 3.1.2"
   gem "shoulda", "~> 3.5.0"
   gem "rdoc", "~> 4.2.2"
-  gem "jeweler", "~> 1.8.4"
+  gem "jeweler", "~> 2.1.1"
 end
