@@ -4,7 +4,7 @@ require 'net/https'
 require 'json'
 require 'active_support'
 require 'active_support/core_ext/object'
-require 'api_postcode_nl/invalid_postcode_exception'
+require 'api_postcode_nl/exceptions'
 
 module ApiPostcodeNl
   class API
@@ -39,10 +39,20 @@ module ApiPostcodeNl
 
         result.body
       end
-      
+
       def handle_errors(result)
         if result.is_a?(Net::HTTPNotFound)
-          raise ApiPostcodeNl::InvalidPostcodeException, JSON.parse(result.body)["exception"]
+          body = JSON.parse(result.body)
+          case body["exceptionId"]
+          when "PostcodeNl_Controller_Address_InvalidHouseNumberException"
+            raise ApiPostcodeNl::InvalidHouseNumberException, body["exception"]
+          when "PostcodeNl_Controller_Address_PostcodeTooLongException"
+            raise ApiPostcodeNl::PostcodeTooLongException, body["exception"]
+          when "PostcodeNl_Service_PostcodeAddress_AddressNotFoundException"
+            raise ApiPostcodeNl::AddressNotFoundException, body["exception"]
+          else
+            raise ApiPostcodeNl::InvalidPostcodeException, body["exception"]
+          end
         end
       end
 

@@ -28,7 +28,7 @@ Gem::Specification.new do |s|
     "api_postcode_nl.gemspec",
     "lib/api_postcode_nl.rb",
     "lib/api_postcode_nl/api.rb",
-    "lib/api_postcode_nl/invalid_postcode_exception.rb",
+    "lib/api_postcode_nl/exceptions.rb",
     "test/helper.rb",
     "test/test_api_postcode_nl.rb"
   ]
