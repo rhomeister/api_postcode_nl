@@ -103,7 +103,7 @@ module ApiPostcodeNl
 
         result = parse(fetch(postcode, house_number, house_number_addition))
 
-        cache.write(key, result ? result : NIL_RESULT_CODE, :expires_in => 1.week) if cache
+        cache.write(key, result ? result : NIL_RESULT_CODE, expires_in: 1.week) if cache
 
         result
       end
