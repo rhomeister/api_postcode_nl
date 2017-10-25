@@ -35,7 +35,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency('activesupport', ['>= 2.3.5'])
   s.add_development_dependency('minitest', ['~> 5.5'])
-  s.add_development_dependency('rdoc', ['~> 5.1.0'])
   s.add_development_dependency('rake', ['~> 12.0'])
+  s.add_development_dependency('rdoc', ['~> 5.1.0'])
 end
 
