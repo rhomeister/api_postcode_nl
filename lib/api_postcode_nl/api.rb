@@ -14,8 +14,8 @@ module ApiPostcodeNl
 
         request = Net::HTTP::Get.new(uri.path)
         request.basic_auth key, secret
-        result = http.start do |http|
-          http.request(request)
+        result = http.start do |session|
+          session.request(request)
         end
         result
       end
