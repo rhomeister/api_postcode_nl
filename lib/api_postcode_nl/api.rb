@@ -21,8 +21,8 @@ module ApiPostcodeNl
       end
     end
 
-    BASE_URL = 'https://api.postcode.nl/rest/addresses'
-    NIL_RESULT_CODE = 'api_postcode_nl_NIL_RESULT_CODE'
+    BASE_URL = 'https://api.postcode.nl/rest/addresses'.freeze
+    NIL_RESULT_CODE = 'api_postcode_nl_NIL_RESULT_CODE'.freeze
 
     class << self
       def get_url(postcode, house_number, house_number_addition = nil)
