@@ -22,12 +22,12 @@ module ApiPostcodeNl
       end
     end
 
-    BASE_URL = "https://api.postcode.nl/rest/addresses"
-    NIL_RESULT_CODE = "api_postcode_nl_NIL_RESULT_CODE"
+    BASE_URL = 'https://api.postcode.nl/rest/addresses'
+    NIL_RESULT_CODE = 'api_postcode_nl_NIL_RESULT_CODE'
 
     class << self
       def get_url(postcode, house_number, house_number_addition = nil)
-        postcode, house_number, house_number_addition = [postcode, house_number, house_number_addition].map{|c| c.to_s.delete(" ")}
+        postcode, house_number, house_number_addition = [postcode, house_number, house_number_addition].map{|c| c.to_s.delete(' ')}
         "#{BASE_URL}/#{postcode}/#{house_number}/#{house_number_addition}"
       end
 
@@ -43,15 +43,15 @@ module ApiPostcodeNl
       def handle_errors(result)
         if result.is_a?(Net::HTTPNotFound)
           body = JSON.parse(result.body)
-          case body["exceptionId"]
-          when "PostcodeNl_Controller_Address_InvalidHouseNumberException"
-            raise ApiPostcodeNl::InvalidHouseNumberException, body["exception"]
-          when "PostcodeNl_Controller_Address_PostcodeTooLongException"
-            raise ApiPostcodeNl::PostcodeTooLongException, body["exception"]
-          when "PostcodeNl_Service_PostcodeAddress_AddressNotFoundException"
-            raise ApiPostcodeNl::AddressNotFoundException, body["exception"]
+          case body['exceptionId']
+          when 'PostcodeNl_Controller_Address_InvalidHouseNumberException'
+            raise ApiPostcodeNl::InvalidHouseNumberException, body['exception']
+          when 'PostcodeNl_Controller_Address_PostcodeTooLongException'
+            raise ApiPostcodeNl::PostcodeTooLongException, body['exception']
+          when 'PostcodeNl_Service_PostcodeAddress_AddressNotFoundException'
+            raise ApiPostcodeNl::AddressNotFoundException, body['exception']
           else
-            raise ApiPostcodeNl::InvalidPostcodeException, body["exception"]
+            raise ApiPostcodeNl::InvalidPostcodeException, body['exception']
           end
         end
       end
@@ -60,19 +60,19 @@ module ApiPostcodeNl
         result = {}
         parsed_response = JSON.parse(response)
         {
-          street_name: parsed_response["street"],
-          house_number: parsed_response["houseNumber"],
-          postcode: parsed_response["postcode"],
-          city:  parsed_response["city"],
-          municipality: parsed_response["municipality"],
-          province: parsed_response["province"],
-          latitude: parsed_response["latitude"],
-          longitude: parsed_response["longitude"],
-          address_type: parsed_response["addressType"],
-          purpose: parsed_response["purpose"],
-          area: parsed_response["surfaceArea"],
-          house_number_additions: parsed_response["houseNumberAdditions"],
-          house_number_addition: parsed_response["houseNumberAddition"]
+          street_name: parsed_response['street'],
+          house_number: parsed_response['houseNumber'],
+          postcode: parsed_response['postcode'],
+          city:  parsed_response['city'],
+          municipality: parsed_response['municipality'],
+          province: parsed_response['province'],
+          latitude: parsed_response['latitude'],
+          longitude: parsed_response['longitude'],
+          address_type: parsed_response['addressType'],
+          purpose: parsed_response['purpose'],
+          area: parsed_response['surfaceArea'],
+          house_number_additions: parsed_response['houseNumberAdditions'],
+          house_number_addition: parsed_response['houseNumberAddition']
         }
       end
 
@@ -86,7 +86,7 @@ module ApiPostcodeNl
           house_number = house_number.to_s
           number = house_number.split(/[^0-9]/)[0]
           if number
-            house_number_addition = house_number.sub(number, "")
+            house_number_addition = house_number.sub(number, '')
             house_number = number
           end
         end
