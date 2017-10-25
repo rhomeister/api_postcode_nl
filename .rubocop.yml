@@ -6,3 +6,5 @@ Metrics/BlockLength:
 # Be more lenient with line length
 Metrics/LineLength:
   Max: 92
+
+inherit_from: .rubocop_todo.yml
