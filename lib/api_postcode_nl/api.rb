@@ -41,18 +41,18 @@ module ApiPostcodeNl
       end
 
       def handle_errors(result)
-        if result.is_a?(Net::HTTPNotFound)
-          body = JSON.parse(result.body)
-          case body['exceptionId']
-          when 'PostcodeNl_Controller_Address_InvalidHouseNumberException'
-            raise ApiPostcodeNl::InvalidHouseNumberException, body['exception']
-          when 'PostcodeNl_Controller_Address_PostcodeTooLongException'
-            raise ApiPostcodeNl::PostcodeTooLongException, body['exception']
-          when 'PostcodeNl_Service_PostcodeAddress_AddressNotFoundException'
-            raise ApiPostcodeNl::AddressNotFoundException, body['exception']
-          else
-            raise ApiPostcodeNl::InvalidPostcodeException, body['exception']
-          end
+        return unless result.is_a?(Net::HTTPNotFound)
+
+        body = JSON.parse(result.body)
+        case body['exceptionId']
+        when 'PostcodeNl_Controller_Address_InvalidHouseNumberException'
+          raise ApiPostcodeNl::InvalidHouseNumberException, body['exception']
+        when 'PostcodeNl_Controller_Address_PostcodeTooLongException'
+          raise ApiPostcodeNl::PostcodeTooLongException, body['exception']
+        when 'PostcodeNl_Service_PostcodeAddress_AddressNotFoundException'
+          raise ApiPostcodeNl::AddressNotFoundException, body['exception']
+        else
+          raise ApiPostcodeNl::InvalidPostcodeException, body['exception']
         end
       end
 
