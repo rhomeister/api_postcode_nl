@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 require File.join(File.dirname(__FILE__), 'lib/api_postcode_nl/version.rb')
 
 Gem::Specification.new do |s|
