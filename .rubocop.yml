@@ -1,0 +1,10 @@
+# Gem specification blocks can be any size
+Metrics/BlockLength:
+  Exclude:
+    - 'api_postcode_nl.gemspec'
+
+# Be more lenient with line length
+Metrics/LineLength:
+  Max: 92
+
+inherit_from: .rubocop_todo.yml
