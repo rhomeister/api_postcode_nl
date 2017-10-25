@@ -57,23 +57,10 @@ module ApiPostcodeNl
       end
 
       def parse(response)
-        result = {}
         parsed_response = JSON.parse(response)
-        { 
-          street_name: parsed_response["street"],
-          house_number: parsed_response["houseNumber"],
-          postcode: parsed_response["postcode"],
-          city:  parsed_response["city"],
-          municipality: parsed_response["municipality"],
-          province: parsed_response["province"],
-          latitude: parsed_response["latitude"],
-          longitude: parsed_response["longitude"],
-          address_type: parsed_response["addressType"],
-          purpose: parsed_response["purpose"],
-          area: parsed_response["surfaceArea"],
-          house_number_additions: parsed_response["houseNumberAdditions"],
-          house_number_addition: parsed_response["houseNumberAddition"]
-        }
+        parsed_response.map do |k, v|
+          [k.underscore, v]
+        end.to_h.symbolize_keys
       end
       
       def cache_key(postcode, house_number, house_number_addition)
