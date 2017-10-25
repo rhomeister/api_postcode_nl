@@ -26,7 +26,7 @@ module ApiPostcodeNl
 
     class << self
       def get_url(postcode, house_number, house_number_addition = nil)
-        postcode, house_number, house_number_addition = [postcode, house_number, house_number_addition].map{ |c| c.to_s.delete(' ') }
+        postcode, house_number, house_number_addition = [postcode, house_number, house_number_addition].map { |c| c.to_s.delete(' ') }
         "#{BASE_URL}/#{postcode}/#{house_number}/#{house_number_addition}"
       end
 
