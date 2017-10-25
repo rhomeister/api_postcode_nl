@@ -94,7 +94,7 @@ module ApiPostcodeNl
         return nil if postcode.blank? || house_number.blank?
 
         key = cache_key(postcode, house_number, house_number_addition)
-        if cache && result = cache.read(key)
+        if cache && (result = cache.read(key))
           return nil if result == NIL_RESULT_CODE
           return result
         end
