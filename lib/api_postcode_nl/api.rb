@@ -26,7 +26,8 @@ module ApiPostcodeNl
 
     class << self
       def get_url(postcode, house_number, house_number_addition = nil)
-        postcode, house_number, house_number_addition = [postcode, house_number, house_number_addition].map { |c| c.to_s.delete(' ') }
+        postcode, house_number, house_number_addition =
+          [postcode, house_number, house_number_addition].map { |c| c.to_s.delete(' ') }
         "#{BASE_URL}/#{postcode}/#{house_number}/#{house_number_addition}"
       end
 
@@ -75,7 +76,8 @@ module ApiPostcodeNl
       end
 
       def cache_key(postcode, house_number, house_number_addition)
-        "api_postcode_nl_#{postcode.to_s.downcase}_#{house_number.to_s.downcase}_#{house_number_addition.to_s.downcase}"
+        "api_postcode_nl_#{postcode.to_s.downcase}_#{house_number.to_s.downcase}" \
+          "_#{house_number_addition.to_s.downcase}"
       end
 
       def address(postcode, house_number, house_number_addition = nil)
