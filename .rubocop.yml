@@ -1,0 +1,3 @@
+# Be more lenient with line length
+Metrics/LineLength:
+  Max: 92
